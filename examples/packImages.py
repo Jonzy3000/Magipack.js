@@ -21,16 +21,17 @@ def packImages(files):
 	data = []
 	p = 0
 	c = 0
+	output = open("images.pack", "wb")
 	for fn in files:
-		f = open(fn[0], 'r').read()
+		f = open(fn[0], 'rb').read()
+		shutil.copyfileobj(open(fn[0], 'rb'), output)
 		l = len(f)
-		if output == None: output = f
-		else: output = output + f
-		data.append([fn[1], p, p + l, fn[1][-3:]])
+		data.append([fn[1], p, p + l, os.path.splitext(fn[1])[-1:][0]])
 		p += l
 		c += 1
 
-	open('images.pack', 'w').write(output)
+
+	output.close()
 	open('images.json', 'w').write(json.dumps(data))
 
 def main(argv = None):
